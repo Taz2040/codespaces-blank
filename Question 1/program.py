@@ -38,7 +38,7 @@ def validate_wifi_password(key):
         print(e)
         return False
     
-    return True
+    return True 
 
 
             
