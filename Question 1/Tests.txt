@@ -2,4 +2,6 @@
 #passes first boolean statement
 print(validate_wifi_password(1111111111111))
 print(validate_wifi_password('111111111'))
-print(validate_wifi_password('1111111111111'))v
+print(validate_wifi_password('1111111111111'))
+
+[' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~']
