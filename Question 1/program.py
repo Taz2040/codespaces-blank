@@ -7,6 +7,7 @@ def validate_wifi_password(key):
             return True
         else:
             return False
+        #push
     Ucase_bool=0
     Lcase_bool=0
     sym_bool=0
