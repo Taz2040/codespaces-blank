@@ -1,0 +1,20 @@
+978-0-13-475416-9,Introduction to Algorithms,Thomas H. Cormen,50,79.99
+978-0-321-71411-0,The C Programming Language,Brian W. Kernighan,30,59.99
+978-0-262-51037-7,Structure and Interpretation of Computer Programs,Harold Abelson,40,44.99
+978-0-672-32938-9,Clean Code: A Handbook of Agile Software Craftsmanship,Robert C. Martin,60,39.99
+978-0-672-33468-0,Code Complete: A Practical Handbook of Software Construction,Steve McConnell,25,49.99
+978-0-321-54705-4,Design Patterns: Elements of Reusable Object-Oriented Software,Erich Gamma,35,54.99
+978-0-201-63361-0,The Pragmatic Programmer: Your Journey to Mastery,20th Anniversary Edition,Andrew Hunt,45,49.99
+978-0-672-32946-4,Refactoring: Improving the Design of Existing Code,Martin Fowler,55,44.99
+978-0-13-110362-7,The Mythical Man-Month: Essays on Software Engineering,Frederick P. Brooks Jr.,40,29.99
+978-0-134-17993-5,Principles of Compiler Design,Alfred V. Aho,30,69.99
+978-0-205-76710-4,Computer Networks,Andrew S. Tanenbaum,35,89.99
+978-0-321-87881-3,Operating System Concepts,Abraham Silberschatz,50,79.99
+978-0-134-64897-2,Artificial Intelligence: A Modern Approach,Stuart Russell,20,79.99
+978-0-13-409266-9,Database System Concepts,Abraham Silberschatz,40,69.99
+978-0-672-33781-0,Domain-Driven Design: Tackling Complexity in the Heart of Software,Eric Evans,30,49.99
+978-0-13-428936-6,Computer Organization and Design: The Hardware/Software Interface,David A. Patterson,25,69.99
+978-0-12-088477-4,Introduction to the Theory of Computation,Michael Sipser,35,89.99
+978-0-13-235088-4,Art of Computer Programming,Volume 1: Fundamental Algorithms,Donald E. Knuth,25,59.99
+978-0-672-33638-7,Test Driven Development: By Example,Kent Beck,40,44.99
+978-0-07-352332-3,Data Structures and Algorithm Analysis in C++,Mark Allen Weiss,30,99.99
