@@ -55,6 +55,7 @@ passlist=[ "SomeHowValid CuzSpaceASymbol","Small_len","Enough_lengt","Over_Lengt
 for x in passlist:
     print("Password:",x)
     check=validate_wifi_password(x)
+    print(check)
     print()
 
 
