@@ -1,3 +1,3 @@
 def fetchwords():
-    list=["Text", "foo", "bar"]
+    list=["text", "foo", "bar"]
     return list
