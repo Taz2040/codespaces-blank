@@ -204,25 +204,43 @@ def main():
     else:
         print("Please ammend the inventory file in order to proceed")
         return False
+    print("------------------------------------------------------------------------------------------")  
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
     def display_inventory(inventory):
         print("Inventory:")
         print(df)
+        
+        
+        
+        
+        
         
     def add_book(inventory):
         bool=True
         while bool:
             while True:
-                isbn=input("Enter ISBN number with proper format:")
+                isbn=input("Enter Uniqueq ISBN number with proper format:")
                 if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
                     temp_list=isbn_list+[isbn]
-                    print("h")
                     if ISBN_is_unique(temp_list,True):
-                        print("hh")
                         break
                 else:
                     x=input("Try again?(press y for yes anything else to go back to menu):")
                     if x=="y":
+                        print()
                         pass
                     else:
                         bool=False
@@ -238,6 +256,7 @@ def main():
                 else:
                     x=input("Invalid,try again?(press y for yes anything else to go back to menu):")
                     if x=="y":
+                        print()
                         pass
                     else:
                         bool=False
@@ -250,7 +269,9 @@ def main():
                     break
                 else:
                     x=("Invalid,try again?(press y for yes anything else to go back to menu):")
+                    
                     if x=="y":
+                        print()
                         pass
                     else:
                         bool=False
@@ -262,16 +283,15 @@ def main():
             print()
             print("You have entered:")
             x=[print(column_names[i],":",item) for i,item in enumerate(record)]
-            x=input("Are you sure? press y to accept and anything else try again:")
+            x=input("Are you sure?Press y to accept anything else try again:")
             if x=="y":
                 book = [ # Create a list representing a book
                     isbn,
                     title,
                     author,
-                    int(quantity), # Convert the quantity to an integer
-                    float(price)] # Convert the price to a float
-                line=[str(item) for item in book]
-                line=','.join(line)
+                    (quantity), # Convert the quantity to an integer
+                    (price)] # Convert the price to a float
+                line=','.join(book)
                 line=line+"\n"
                 with open("inventory.txt", "a") as file:
                 # Write the line to the file
@@ -283,25 +303,36 @@ def main():
     
     def update_stock(inventory):
         isbn=input("enter ISBN:")
+        cont=True
         if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
             temp=isbn_list+[isbn]
 
 
             if not ISBN_is_unique(temp,True):
-                stock=input("Current stock of this book:")
                 for i,x in enumerate(isbn_list):
                     if x==isbn:
-
+                        print("Current stock of book saved as:",fields[i][3])
+                        stock=input("New stock of the book:")
+                        x=input("Are you sure you want to update?(press y to continue,others to cancel):")
+                        if x!='y':
+                            cont=False
+                            break    
                         fields[i][3]=stock
                         with open("inventory.txt", "w") as file:
                         # Write the line to the file
                             to_write=[]
                             for i,x in enumerate(fields):
                                 x=','.join(x)
-                                print(x)
                                 to_write.append(x)
                             file.writelines(s + "\n" for s in to_write)
+                            print("Book updated.")
                         break
+            elif cont:
+                print("ISBN not in database.")
+        else:
+            print("ISBN invalid.")
+                
+                        
 
     def search_isbn(inventory):
         isbn=input("ISBN to lookup:")
@@ -323,22 +354,34 @@ def main():
         column_names=['ISBN','Title','Author','Quantity','Price']
         df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
         inventory=fields
+        print()
+        print()
+        print("------------------------------------------------------------------------------------------")  
+        messages=["1)Display Inventory","2)Add Book","3)Update Stock","4)Search For Book by ISBN","5)Calculate Inventory Value",
+                  "6)Generate sales report","7)Exit Program"]
+        x=[print(e) for e in messages]
+        print()
         # Ask the user to enter a number from 1 to 6
         num = input("Enter a number from 1 to 6: ")
         # Use the match and case keywords to execute the functions based on the user input
         match num:
             case "1":
+                print("Display Inventory:")
                 display_inventory(inventory)
             case "2":
+                print("Add Book:")
                 add_book(inventory)
             case "3":
-                #doesn't work
+                print("Update Stock:")
                 update_stock(inventory)
             case "4":
+                print("Search For Book by ISBN:")
                 search_isbn(inventory)
             case "5":
+                
                 inventory_value(inventory)
             case "6":
+                print("Generate sales report:")
                 sales_report(inventory)
             case _:
                 print("Invalid input. Please enter a number between 1 and 6.")
