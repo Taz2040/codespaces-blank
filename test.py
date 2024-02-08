@@ -165,7 +165,7 @@ def main():
         Returns:
             bool: True if all ISBNs in the list are unique, False otherwise.
         """
-        templist=[x.replace("-","") for x in lst] # Remove the hyphens from the ISBNs
+        templist=lst # Remove the hyphens from the ISBNs
         blank=[] # Create an empty list to store the unique ISBNs
         for i,num in enumerate(templist):
             if num not in blank: # Check if the ISBN is already in the unique list
@@ -306,8 +306,6 @@ def main():
         cont=True
         if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
             temp=isbn_list+[isbn]
-
-
             if not ISBN_is_unique(temp,True):
                 for i,x in enumerate(isbn_list):
                     if x==isbn:
@@ -335,11 +333,33 @@ def main():
                         
 
     def search_isbn(inventory):
-        isbn=input("ISBN to lookup:")
-        print(isbn_list)
-        if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]) and not ISBN_is_unique(isbn_list+[isbn],True):
-            for x in [field[i] for i,x in enumerate(isbn_list) if x==isbn]:
-                print(x)
+        cont=True
+        while cont:
+            isbn=input("ISBN to lookup:")
+            if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
+                if not ISBN_is_unique(isbn_list+[isbn],True):
+                    for i,x in enumerate(isbn_list):
+                        if x==isbn:
+                            print(df.iloc[i])
+                            cont=False
+                            break
+                else:
+                    print("Book not in inventory or database.")
+            else:
+                print("Invalid ISBN")
+            if cont:
+                x=input("Try again?(Press y to continue, anything else to go back to menue):")
+                print()
+                if x!="y":
+                    cont=False
+        
+        
+        
+        
+                
+            
+                        
+                    
                     
             
                 
@@ -367,24 +387,31 @@ def main():
         match num:
             case "1":
                 print("Display Inventory:")
+                print()
                 display_inventory(inventory)
             case "2":
                 print("Add Book:")
+                print()
                 add_book(inventory)
             case "3":
                 print("Update Stock:")
+                print()
                 update_stock(inventory)
             case "4":
                 print("Search For Book by ISBN:")
+                print()
                 search_isbn(inventory)
             case "5":
-                
+                print("Calculate Inventory Value:")
+                print()
                 inventory_value(inventory)
             case "6":
                 print("Generate sales report:")
+                print()
                 sales_report(inventory)
             case _:
                 print("Invalid input. Please enter a number between 1 and 6.")
     
     
 main()
+print()
