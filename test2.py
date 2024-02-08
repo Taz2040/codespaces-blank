@@ -11,14 +11,15 @@ def main():
         # Open the file in read mode
         with open("inventory.txt", 'r') as file:
             print("File Found!")
-            print("Reading files...")
+            print("Inventory database must in a valid format/file in order to proceed. ")  
+            print("Reading file...")
             lines = [line.strip() for line in file] # A list of strings, each representing a line in the file
             fields= [line.split(',') for line in lines] # A list of lists, each representing a book with its fields
             inventory = [] # A list to store the valid books
     except FileNotFoundError:
         print("Error: File not found.") # Handle the exception if the file is not found
         
-        
+      
     print("Validating inventory.txt....")
     print()
     def check_data_type(element, data_type):
@@ -65,6 +66,7 @@ def main():
         return True # Return True if all fields are valid
     for index,line in enumerate(fields): # Loop through each line in the file
         if not entry_format_check(index,line): # Check if the line has the correct format and data types
+            print("Please ammend the inventory file in order to proceed")
             return False # Return False if not
         else:
             isbn, title, author, quantity, price = line # Unpack the fields into variables
@@ -130,6 +132,7 @@ def main():
             if len(num[4])!=1: # Check if the check digit element is one digit
                 print("ISBN:",number,"in line",index,"is invalid as the check digit(the last digit/group) can be of only one character")
                 return False
+            
             num2=''.join(num) # Join the list of elements into a single string without hyphens
             # Calculate the sum of even-positioned digits
             even_sum = sum(int(num2[i]) for i in range(1, 12, 2)) * 3
@@ -152,7 +155,7 @@ def main():
         print("ISBN(s) have valid prefix group and valid check digit.")
         return True
 
-    def ISBN_is_unique(list,new_item_bool):
+    def ISBN_is_unique(lst,new_item_bool):
         """Verifies that each ISBN in the list is unique and does not repeat.
 
         Args:
@@ -162,15 +165,16 @@ def main():
         Returns:
             bool: True if all ISBNs in the list are unique, False otherwise.
         """
-        templist=[x.replace("-","") for x in list] # Remove the hyphens from the ISBNs
+        templist=[x.replace("-","") for x in lst] # Remove the hyphens from the ISBNs
         blank=[] # Create an empty list to store the unique ISBNs
         for i,num in enumerate(templist):
             if num not in blank: # Check if the ISBN is already in the unique list
                 blank.append(num) # If not, add it to the unique list
             else:
-                index=[blank.index(num),i] # If yes, find the indices of the repeated ISBNs
-                if new_item_bool and i==(len(templist-1)): # If the last item is a new item to be added, print a warning message
-                    print("ISBN:",num,"already exists in list,index:",index[0])
+                index=[blank.index(num),i]
+                temporary=len(templist)-1# If yes, find the indices of the repeated ISBNs
+                if new_item_bool and (i==temporary): # If the last item is a new item to be added, print a warning message
+                    print("ISBN:",num,"exists in list,index:",index[0])
                 else: # If not, print an error message
                     print(f"ISBN:{num} repeats atleast in {index[0]} and {i}")
                 return False
@@ -194,29 +198,151 @@ def main():
         else: # If any of the functions return False, the ISBNs are invalid
             return False
     if ISBN_validation(isbn_list):
+        print("Inventory file validated.")
+        print("You may proceed.")
         pass
     else:
+        print("Please ammend the inventory file in order to proceed")
         return False
     
+    def display_inventory(inventory):
+        print("Inventory:")
+        print(df)
+        
+    def add_book(inventory):
+        bool=True
+        while bool:
+            while True:
+                isbn=input("Enter ISBN number with proper format:")
+                if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
+                    temp_list=isbn_list+[isbn]
+                    print("h")
+                    if ISBN_is_unique(temp_list,True):
+                        print("hh")
+                        break
+                else:
+                    x=input("Try again?(press y for yes anything else to go back to menu):")
+                    if x=="y":
+                        pass
+                    else:
+                        bool=False
+                        break
+            if not bool:
+                break
+            title=input("Title:")
+            author=input("Author:")
+            while True:
+                quantity=input("Quantity:")
+                if check_data_type(quantity,int):
+                    break
+                else:
+                    x=input("Invalid,try again?(press y for yes anything else to go back to menu):")
+                    if x=="y":
+                        pass
+                    else:
+                        bool=False
+                        break
+            if not bool:
+                break
+            while True:
+                price=input("price:")
+                if check_data_type(price,float):
+                    break
+                else:
+                    x=("Invalid,try again?(press y for yes anything else to go back to menu):")
+                    if x=="y":
+                        pass
+                    else:
+                        bool=False
+                        break
+            if not bool:
+                break
+            
+            record=[isbn,title,author,quantity,price]
+            print()
+            print("You have entered:")
+            x=[print(column_names[i],":",item) for i,item in enumerate(record)]
+            x=input("Are you sure? press y to accept and anything else try again:")
+            if x=="y":
+                book = [ # Create a list representing a book
+                    isbn,
+                    title,
+                    author,
+                    int(quantity), # Convert the quantity to an integer
+                    float(price)] # Convert the price to a float
+                line=[str(item) for item in book]
+                line=','.join(line)
+                line=line+"\n"
+                with open("inventory.txt", "a") as file:
+                # Write the line to the file
+                    file.write(line)
+                    fields.append(book)
+                print("Book Added")
+                bool=False
+                break
     
-    
+    def update_stock(inventory):
+        isbn=input("enter ISBN:")
+        if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
+            temp=isbn_list+[isbn]
+
+
+            if not ISBN_is_unique(temp,True):
+                stock=input("Current stock of this book:")
+                print("isbn list",isbn_list)
+                for i,x in enumerate(isbn_list):
+                    if x==isbn:
+
+                        fields[i][3]=stock
+                        print("Total Fields a",fields)
+                        with open("inventory.txt", "w") as file:
+                        # Write the line to the file
+                            print("temp print")
+                            to_write=[]
+                            for i,x in enumerate(fields):
+                                x=','.join(x)
+                                print(x)
+                                to_write.append(x)
+                            file.writelines(s + "\n" for s in to_write)
+                        break
+
+    def search_isbn(inventory):
+        isbn=input("ISBN to lookup:")
+        print(isbn_list)
+        if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]) and not ISBN_is_unique(isbn_list+[isbn],True):
+            for x in [field[i] for i,x in enumerate(isbn_list) if x==isbn]:
+                print(x)
+                    
+            
+                
+            
+                    
+                
+                
+                
+
     while True:
+        import pandas as pd
+        column_names=['ISBN','Title','Author','Quantity','Price']
+        df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
+        inventory=fields
         # Ask the user to enter a number from 1 to 6
         num = input("Enter a number from 1 to 6: ")
         # Use the match and case keywords to execute the functions based on the user input
         match num:
             case "1":
-                display_inventory()
+                display_inventory(inventory)
             case "2":
-                add_book()
+                add_book(inventory)
             case "3":
-                update_stock()
+                #doesn't work
+                update_stock(inventory)
             case "4":
-                search_isbn()
+                search_isbn(inventory)
             case "5":
-                inventory_value()
+                inventory_value(inventory)
             case "6":
-                sales_report()
+                sales_report(inventory)
             case _:
                 print("Invalid input. Please enter a number between 1 and 6.")
     

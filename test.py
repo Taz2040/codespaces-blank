@@ -291,14 +291,16 @@ def main():
                 stock=input("Current stock of this book:")
                 for i,x in enumerate(isbn_list):
                     if x==isbn:
-                        
+
                         fields[i][3]=stock
                         with open("inventory.txt", "w") as file:
                         # Write the line to the file
-                            line=[str(e) for e in field[i]]
-                            line=','.join(line)
-                            file.write(line)
-                            
+                            to_write=[]
+                            for i,x in enumerate(fields):
+                                x=','.join(x)
+                                print(x)
+                                to_write.append(x)
+                            file.writelines(s + "\n" for s in to_write)
                         break
 
     def search_isbn(inventory):
