@@ -16,6 +16,9 @@ def main():
             lines = [line.strip() for line in file] # A list of strings, each representing a line in the file
             fields= [line.split(',') for line in lines] # A list of lists, each representing a book with its fields
             inventory = [] # A list to store the valid books
+            import pandas as pd
+            column_names=['ISBN','Title','Author','Quantity','Price']
+            df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
     except FileNotFoundError:
         print("Error: File not found.") # Handle the exception if the file is not found
         
@@ -352,9 +355,80 @@ def main():
                 print()
                 if x!="y":
                     cont=False
+                    
+        
+    def inventory_value(inventory):
+        sums=[(float(book[3])*float(book[4])) for book in fields]
+        result=0
+        for sum in sums:
+            result=float(result+sum)
+
+        result=round(result,2)
+        print("Inventory value is:",result)    
         
         
-        
+    def sales_report(inventory):
+        cont=True
+        sum_list=[]
+        sold_index_list=[]
+        sold_quants=[]
+        cont2=True
+        while cont2:
+            isbn=input("Enter ISBN for the book sold:")
+            if not ISBN_is_unique(isbn_list+[isbn],True):
+                for i,x in enumerate(isbn_list):
+                    if x==isbn:
+                        index=i
+                        break
+                price=float(fields[index][4])
+                current_quant=int(fields[index][3])
+                print("Quantity remaining:",current_quant)
+                while True:
+                    sold=input('Number of Books Sold:')
+                    x=check_data_type(sold, int)
+                    if not x or int(sold)<0:
+                        print("Please enter a positive whole")
+                    elif current_quant-int(sold)<0:
+                        print("Invalid quantity sold as there was not enough stock to be sold that many")
+                        print("Please check if you have entered the ISBN for the wrong,if you just press 0 for quantity sold.")
+                    elif int(sold)!=0:
+                        x=input("Book found,valid sold amount,confirm sales?(press y to continue,else to rentry):")
+                        if x=="y":
+                            already_in=False
+                            fields[index][3]=current_quant-int(sold)
+                            for i,val in enumerate(sold_index_list):
+                                if val==index:
+                                    sold_quants[i]=sold_quants[i]+int(sold)
+                                    sum_list[i]=sum_list[i]+((price)*float(sold))
+                                    already_in=True
+                            if not already_in:
+                                sold_quants.append(int(sold))
+                                sold_index_list.append(index)
+                                sum_list.append(roun((price)*float(sold),2))
+                                print("Sales added")
+                                print("")
+                            x2=input("Generate report or continue?(press y to to generate,else to continue):")
+                            if x2=='y':
+                                cont2=False
+                            break
+                        else:
+                            break
+                    else:
+                        break
+                        
+            else:
+                print("ISBN not in database, please re-enter a ISBN with proper formating which is in inventory")
+                
+                        
+                
+        print("Generate")
+        print(f"sold quants:{sold_quants}")
+        print(f"sold index:{sold_index_list}")
+        print(f"sold sums:{sum_list}")
+
+                                
+                    
+            
         
                 
             
@@ -382,7 +456,7 @@ def main():
         x=[print(e) for e in messages]
         print()
         # Ask the user to enter a number from 1 to 6
-        num = input("Enter a number from 1 to 6: ")
+        num = input("Enter a number from 1 to 7: ")
         # Use the match and case keywords to execute the functions based on the user input
         match num:
             case "1":
@@ -403,14 +477,15 @@ def main():
                 search_isbn(inventory)
             case "5":
                 print("Calculate Inventory Value:")
-                print()
                 inventory_value(inventory)
             case "6":
                 print("Generate sales report:")
                 print()
                 sales_report(inventory)
+            case "7":
+                return True
             case _:
-                print("Invalid input. Please enter a number between 1 and 6.")
+                print("Invalid input. Please enter a number between 1 and 7.")
     
     
 main()

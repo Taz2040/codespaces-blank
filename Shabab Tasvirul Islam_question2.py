@@ -308,17 +308,9 @@ def main():
             for x in [field[i] for i,x in enumerate(isbn_list) if x==isbn]:
                 print(x)
     def inventory_value(inventory):
-        summation=[]
-        print(0)
-        print(fields)
-        for i,line in fields:
-            print(1)
-            a=float(line[3])
-            b=(line[4])
-            print(a,b)
-            summation.append(a*b)
+        sums=[(float(book[3])*float(book[4])) for book in fields]
         
-        print(summation)                    
+        print(sums)                    
             
                 
             
