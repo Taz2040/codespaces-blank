@@ -232,6 +232,7 @@ def main():
     def display_inventory(inventory):
         print("Inventory:")
         import pandas as pd
+        #importing the data in pandas dataframe
         df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
         print(df)
         
@@ -313,38 +314,92 @@ def main():
                 bool=False
                 break
     
-    def update_stock(inventory):
-        cont=True
-        while cont:
-            isbn=input("enter ISBN:")
-            if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
-                temp=isbn_list+[isbn]
-                if not ISBN_is_unique(temp,True):
-                    for i,x in enumerate(isbn_list):
-                        if x==isbn:
-                            print("Current stock of book saved as:",fields[i][3])
-                            while True:
-                                stock=input("New stock of the book:")
-                                if check_data_type(stock,int):
-                                    break
-                                else:
-                                    print("Invalid amount")
-                            
-                            x=input("Are you sure you want to update?(press y to continue,others to cancel):")
-                            if x!='y':
-                                cont=False
-                                break    
-                            fields[i][3]=stock
-                            with open("inventory.txt", "w") as file:
-                            # Write the line to the file
-                                file.writelines([",".join(line) + "\n" for line in fields])
-                                print("Book updated.")
-                                cont=False    
-                            break
-                else:
-                    print("ISBN not in database.")
-            else:
-                print("ISBN invalid.")
+    def add_book(inventory):
+        """Adds a new book to the inventory.
+    
+        Parameters:
+        inventory (list): A list of lists representing the book records.
+    
+        Returns:
+        None
+    
+        Raises:
+        ValueError: If the ISBN is not valid or unique, or if the quantity or price is not a valid number.
+        """
+        bool=True # A flag to control the loop
+        while bool: # Start a loop to get the user input
+            while True: # Start a loop to get the ISBN from the user
+                isbn=input("Enter Uniqueq ISBN number with proper format:")
+                # Check if the ISBN is valid and unique using helper functions
+                if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
+                    temp_list=isbn_list+[isbn] # Create a temporary list with the existing ISBNs and the new one
+                    if ISBN_is_unique(temp_list,True): # Check if the new ISBN is unique in the list
+                        break # Exit the loop if the ISBN is valid and unique
+                else: # If the ISBN is not valid or unique
+                    x=input("Try again?(press y for yes anything else to go back to menu):") # Ask the user if they want to try again
+                    if x=="y": # If the user wants to try again
+                        print()
+                        pass # Do nothing and continue the loop
+                    else: # If the user does not want to try again
+                        bool=False # Set the flag to False to exit the loop
+                        break # Exit the loop
+            if not bool: # If the flag is False
+                break # Exit the outer loop
+            title=input("Title:") # Get the title from the user
+            author=input("Author:") # Get the author from the user
+            while True: # Start a loop to get the quantity from the user
+                quantity=input("Quantity:") # Get the quantity from the user
+                # Check if the quantity is a valid integer using a helper function
+                if check_data_type(quantity,int):
+                    break # Exit the loop if the quantity is valid
+                else: # If the quantity is not valid
+                    x=input("Invalid,try again?(press y for yes anything else to go back to menu):") # Ask the user if they want to try again
+                    if x=="y": # If the user wants to try again
+                        print()
+                        pass # Do nothing and continue the loop
+                    else: # If the user does not want to try again
+                        bool=False # Set the flag to False to exit the loop
+                        break # Exit the loop
+            if not bool: # If the flag is False
+                break # Exit the outer loop
+            while True: # Start a loop to get the price from the user
+                price=input("price:") # Get the price from the user
+                # Check if the price is a valid float using a helper function
+                if check_data_type(price,float):
+                    break # Exit the loop if the price is valid
+                else: # If the price is not valid
+                    x=("Invalid,try again?(press y for yes anything else to go back to menu):") # Ask the user if they want to try again
+                    
+                    if x=="y": # If the user wants to try again
+                        print()
+                        pass # Do nothing and continue the loop
+                    else: # If the user does not want to try again
+                        bool=False # Set the flag to False to exit the loop
+                        break # Exit the loop
+            if not bool: # If the flag is False
+                break # Exit the outer loop
+            
+            record=[isbn,title,author,quantity,price] # Create a list representing the user input
+            print()
+            print("You have entered:")
+            x=[print(column_names[i],":",item) for i,item in enumerate(record)] # Print the user input with labels
+            x=input("Are you sure?Press y to accept anything else try again:") # Ask the user if they are sure
+            if x=="y": # If the user is sure
+                book = [ # Create a list representing a book
+                    isbn,
+                    title,
+                    author,
+                    (quantity), # Convert the quantity to an integer
+                    (price)] # Convert the price to a float
+                line=','.join(book) # Join the book elements into a string separated by commas
+                line=line+"\n" # Add a newline character at the end of the string
+                with open("inventory.txt", "a") as file: # Open the inventory file in append mode
+                    # Write the line to the file
+                    file.write(line)
+                    fields.append(book) # Add the book to the inventory list
+                print("Book Added")
+                bool=False # Set the flag to False to exit the loop
+                break # Exit the loop
                 
                         
 
