@@ -2,4 +2,4 @@
 978-0-321-71411-4,The C Programming Language,Brian W. Kernighan,778,59.99
 978-0-262-51037-0,Structure and Interpretation of Computer Programs,Harold Abelson,40,44.99
 978-0-13-428936-6,asd,zxc,420,45.0
-978-0-672-33781-9,asd,zxc,69,420
+978-0-672-33781-9,asd,zxc,100,420

@@ -18,7 +18,7 @@ def main():
             inventory = [] # A list to store the valid books
             import pandas as pd
             column_names=['ISBN','Title','Author','Quantity','Price']
-            df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
+
     except FileNotFoundError:
         print("Error: File not found.") # Handle the exception if the file is not found
         
@@ -55,7 +55,8 @@ def main():
         Returns:
             bool: True if the line has the correct format and data types, False otherwise.
         """
-        if len(line)!=5: # Check if the line has 5 fields
+
+        if len(line)!=5 : # Check if the line has 5 fields
             print(f"Row: {index} (first row is 0) has {len(line)} items.")
             print("Please keep in mind,the program cannot handle book titles with comma's(,) in them.")
             return False
@@ -67,18 +68,24 @@ def main():
                     print("In line",index,column_names[x],":",line[x],"is not of type ",column_types[x])
                     return False
         return True # Return True if all fields are valid
+    if len(fields)==0:
+        print("File empty,Please ammend the inventory file in order to proceed.")
+        return False
     for index,line in enumerate(fields): # Loop through each line in the file
         if not entry_format_check(index,line): # Check if the line has the correct format and data types
             print("Please ammend the inventory file in order to proceed")
             return False # Return False if not
+        elif len(fields)==0:
+            print("File empty,Please ammend the inventory file in order to proceed.")
+            return False
         else:
             isbn, title, author, quantity, price = line # Unpack the fields into variables
             book = [ # Create a list representing a book
                 isbn,
                 title,
                 author,
-                int(quantity), # Convert the quantity to an integer
-                float(price) # Convert the price to a float
+                quantity, 
+                price 
             ]
             inventory.append(book) # Add the book to the inventory list
     print("Each entry is of correct data type and format.")
@@ -224,6 +231,8 @@ def main():
       
     def display_inventory(inventory):
         print("Inventory:")
+        import pandas as pd
+        df = pd.DataFrame(fields, columns=['ISBN','Title','Author','Quantity','Price'])
         print(df)
         
         
@@ -305,33 +314,37 @@ def main():
                 break
     
     def update_stock(inventory):
-        isbn=input("enter ISBN:")
         cont=True
-        if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
-            temp=isbn_list+[isbn]
-            if not ISBN_is_unique(temp,True):
-                for i,x in enumerate(isbn_list):
-                    if x==isbn:
-                        print("Current stock of book saved as:",fields[i][3])
-                        stock=input("New stock of the book:")
-                        x=input("Are you sure you want to update?(press y to continue,others to cancel):")
-                        if x!='y':
-                            cont=False
-                            break    
-                        fields[i][3]=stock
-                        with open("inventory.txt", "w") as file:
-                        # Write the line to the file
-                            to_write=[]
-                            for i,x in enumerate(fields):
-                                x=','.join(x)
-                                to_write.append(x)
-                            file.writelines(s + "\n" for s in to_write)
-                            print("Book updated.")
-                        break
-            elif cont:
-                print("ISBN not in database.")
-        else:
-            print("ISBN invalid.")
+        while cont:
+            isbn=input("enter ISBN:")
+            if ISBN_char_and_charlen_verification([isbn]) and ISBN_group_and_checkdigit_validation([isbn]):
+                temp=isbn_list+[isbn]
+                if not ISBN_is_unique(temp,True):
+                    for i,x in enumerate(isbn_list):
+                        if x==isbn:
+                            print("Current stock of book saved as:",fields[i][3])
+                            while True:
+                                stock=input("New stock of the book:")
+                                if check_data_type(stock,int):
+                                    break
+                                else:
+                                    print("Invalid amount")
+                            
+                            x=input("Are you sure you want to update?(press y to continue,others to cancel):")
+                            if x!='y':
+                                cont=False
+                                break    
+                            fields[i][3]=stock
+                            with open("inventory.txt", "w") as file:
+                            # Write the line to the file
+                                file.writelines([",".join(line) + "\n" for line in fields])
+                                print("Book updated.")
+                                cont=False    
+                            break
+                else:
+                    print("ISBN not in database.")
+            else:
+                print("ISBN invalid.")
                 
                         
 
@@ -387,7 +400,7 @@ def main():
                     sold=input('Number of Books Sold:')
                     x=check_data_type(sold, int)
                     if not x or int(sold)<0:
-                        print("Please enter a positive whole")
+                        print("Please enter a whole number")
                     elif current_quant-int(sold)<0:
                         print("Invalid quantity sold as there was not enough stock to be sold that many")
                         print("Please check if you have entered the ISBN for the wrong,if you just press 0 for quantity sold.")
@@ -404,27 +417,49 @@ def main():
                             if not already_in:
                                 sold_quants.append(int(sold))
                                 sold_index_list.append(index)
-                                sum_list.append(roun((price)*float(sold),2))
+                                sum_list.append(round((price)*float(sold),2))
                                 print("Sales added")
                                 print("")
-                            x2=input("Generate report or continue?(press y to to generate,else to continue):")
-                            if x2=='y':
-                                cont2=False
-                            break
-                        else:
-                            break
+                                break
                     else:
                         break
+                    
                         
             else:
                 print("ISBN not in database, please re-enter a ISBN with proper formating which is in inventory")
-                
+            x2=input("Generate report or continue?(press y to to generate,else to continue):")
+            if x2=='y':
+                cont2=False
+                break    
                         
                 
         print("Generate")
-        print(f"sold quants:{sold_quants}")
-        print(f"sold index:{sold_index_list}")
-        print(f"sold sums:{sum_list}")
+        print(f"sold quant{sold_index_list}")
+        print(f"sold index{sold_index_list}")
+        print(f"sold{sum_list}")
+        # Have 3 separate lists named indexes, quantities, and amounts that contain the index numbers, quantity sold, and amount made for each book
+        total = 0 # Initialize the total amount earned
+        print("Sales Report")
+        # Loop through the indexes list and use the loop variable as the index for the other two lists
+        for i,index in enumerate(sold_index_list):
+            quantity_sold = sold_quants[i] # Access the quantity sold from the quantities list using the same index
+            amount_made = sum_list[i] # Access the amount made from the amounts list using the same index
+            isbn, title, author, quantity, price = fields[index] # Use the index to access the corresponding book record from fields
+            # Print the information of each book sold in a separate line with a label
+            print(f"Book sold:\n\tISBN: {isbn}\n\tTitle: {title}\n\tAuthor: {author}\n\tQuantity sold: {quantity_sold}\n\tCurrent quantity: {quantity}\n\tAmount made: {amount_made}")
+            total += amount_made # Add the amount made to the total amount earned
+
+        # Print the total amount earned at the end of the report
+        print(f"Total amount earned: {total}")
+        
+        with open("inventory.txt", "w") as file:
+            # Write the line to the file
+                to_write=[]
+                for i,x in enumerate(fields):
+                    x=','.join(str(x))
+                    to_write.append(x)
+                file.writelines(s + "\n" for s in to_write)
+                print("inventory updated.")
 
                                 
                     
