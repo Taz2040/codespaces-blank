@@ -1,3 +1,3 @@
-978-0-13-475416-9,Introduction to Algorithms,Thomas H. Cormen,50,79.99
-978-0-321-71411-0,30,59.99
-978-0-262-51037-7,Structure and Interpretation of Computer Programs,Harold Abelson,40,44.99
+978-0-13-475416-3,Introduction to Algorithms,Thomas H. Cormen,50,79.99           
+978-0-321-71411-4,The C Programming Language,Brian W. Kernighan,30,59.99
+978-0-262-51037-0,Structure and Interpretation of Computer Programs,Harold Abelson,40,44.99
