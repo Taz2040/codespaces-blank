@@ -295,8 +295,8 @@ def main():
                         fields[i][3]=stock
                         with open("inventory.txt", "w") as file:
                         # Write the line to the file
-                            line=[str(e) for e in field[i]]
-                            line=','.join(line)
+                            line=[str(e) for e in fields[i]]
+                            print(line)
                             file.write(line)
                             
                         break
